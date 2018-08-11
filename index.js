@@ -25,8 +25,8 @@ mofron.effect.VrtPos = class extends mofron.Effect {
         try {
             if ('center' === this.type()) {
                 if (true === mofron.func.isInclude(cmp, 'Text')) {
-                    if ((null !== cmp.parent()) && ('flex' === cmp.style('display'))) {
-                        cmp.style({
+                    if ((null !== cmp.target().parent()) && ('flex' === cmp.target().parent().style('display'))) {
+                        cmp.target().parent().style({
                             'align-items' : 'center'
                         });
                     } else {
