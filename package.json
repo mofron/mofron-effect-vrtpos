@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-vrtpos",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "vertical position effect for mofron",
   "main": "index.js",
   "scripts": {

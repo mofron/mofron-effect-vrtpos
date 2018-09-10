@@ -41,51 +41,67 @@ mofron.effect.VrtPos = class extends mofron.Effect {
     
     execonts (cmp, flg) {
         try {
+            if (true === mofron.func.isInclude(cmp, 'Text')) {
+                this.execonts_txt(cmp, flg);
+                return;
+            }
             if ('center' === this.type()) {
-                if (true === mofron.func.isInclude(cmp, 'Text')) {
-                    if ( (null   !== cmp.target().parent()) &&
-                         ('flex' === cmp.target().parent().style('display')) ) {
-                        cmp.target().parent().style({
-                            'align-items' : (true === flg) ? 'center' : null
-                        });
-                    } else if ( (null   !== cmp.target().parent()) &&
-                                ('absolute' === cmp.target().parent().style('position')) ) {
-                        cmp.style({
-                            'position' : (true === flg) ? 'relative' : null,
-                            'top'      : (true === flg) ? '50%' : null,
-                            '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
-                            'transform'         : (true === flg) ? 'translateY(-50%)' : null
-                        });
-                        if ((true === flg) && (null !== this.offset())) {
-                            cmp.sizeValue(
-                                'top',
-                                mf.func.sizeSum(cmp.sizeValue('top'), this.offset())
-                            );
-                        }
-                    } else {
-                        cmp.style({
-                            'margin-top'    : (true === flg) ? 'auto' : null,
-                            'margin-bottom' : (true === flg) ? 'auto' : null
-                        });
-                    }
-                } else {
+                cmp.style({
+                    'position' : (true === flg) ? 'relative' : null,
+                    'top'      : (true === flg) ? '50%'      : null,
+                    '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
+                    'transform'         : (true === flg) ? 'translateY(-50%)' : null
+                });
+            } else if ('bottom' === this.type()) {
+                cmp.style({
+                    'position' : (true === flg) ? 'absolute' : null,
+                    'bottom'   : (true === flg) ? '0%'       : null
+                });
+                if ((true === flg) && (null !== this.offset())) {
+                    cmp.style({'bottom' : this.offset()});
+                }
+            }
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    execonts_txt (cmp, flg) {
+        try {
+            if ('center' === this.type()) {
+                if ( (null   !== cmp.target().parent()) &&
+                     ('flex' === cmp.target().parent().style('display')) ) {
+                    cmp.target().parent().style({
+                        'align-items' : (true === flg) ? this.type() : null
+                    });
+                } else if ( (null   !== cmp.target().parent()) &&
+                            ('absolute' === cmp.target().parent().style('position')) ) {
                     cmp.style({
                         'position' : (true === flg) ? 'relative' : null,
-                        'top'      : (true === flg) ? '50%'      : null,
+                        'top'      : (true === flg) ? '50%' : null,
                         '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
                         'transform'         : (true === flg) ? 'translateY(-50%)' : null
                     });
+                    if ((true === flg) && (null !== this.offset())) {
+                        cmp.sizeValue(
+                            'top',
+                            mf.func.sizeSum(cmp.sizeValue('top'), this.offset())
+                        );
+                    }
+                } else {
+                    cmp.style({
+                        'margin-top'    : (true === flg) ? 'auto' : null,
+                        'margin-bottom' : (true === flg) ? 'auto' : null
+                    });
                 }
             } else if ('bottom' === this.type()) {
-                if ( (null   !== cmp.target().parent()) &&
-                     ('absolute' === cmp.target().parent().style('position')) ) {
-                    cmp.style({
-                        'position' : (true === flg) ? 'absolute' : null,
-                        'bottom'   : (true === flg) ? '0%'       : null
-                    });
-                    if ((true === flg) && (null !== this.offset())) {
-                        cmp.style({'bottom' : this.offset()});
-                    }
+                cmp.style({
+                    'position' : (true === flg) ? 'absolute' : null,
+                    'bottom'   : (true === flg) ? '0%'       : null
+                });
+                if ((true === flg) && (null !== this.offset())) {
+                    cmp.style({'bottom' : this.offset()});
                 }
             }
         } catch (e) {
