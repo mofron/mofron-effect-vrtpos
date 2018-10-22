@@ -1,19 +1,23 @@
 /**
  * @file mofron-effect-vrtpos/index.js
+ * @brief vertical position effect for mofron component
  * @author simpart
  */
 const mf = require('mofron');
-/**
- * @class VrtPos
- * @brief Vertical Position effect class
- */
+
 mofron.effect.VrtPos = class extends mofron.Effect {
-    
+    /**
+     * initialize vertical position effect
+     *
+     * @param p1 (object) effect option
+     * @param p1 (string) position type
+     * @param p2 (string) offset size
+     */
     constructor (po, p2) {
         try {
             super();
             this.name('VrtPos');
-            this.prmMap('type', 'offset');
+            this.prmMap(['type', 'offset']);
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -21,34 +25,24 @@ mofron.effect.VrtPos = class extends mofron.Effect {
         }
     }
     
-    enable (cmp) {
-        try {
-            this.execonts(cmp, true);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
+    enable (cmp)  {}
+    disable (cmp) {}
     
-    disable (cmp) {
-        try {
-            this.execonts(cmp, false);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    execonts (cmp, flg) {
+    /**
+     * vertical position effect
+     *
+     * @note private method
+     */
+    contents (flg, cmp) {
         try {
             if (true === mofron.func.isInclude(cmp, 'Text')) {
-                this.execonts_txt(cmp, flg);
+                this.contsTxt(cmp, flg);
                 return;
             }
             if ('center' === this.type()) {
                 cmp.style({
-                    'position' : (true === flg) ? 'relative' : null,
-                    'top'      : (true === flg) ? '50%'      : null,
+                    'position'          : (true === flg) ? 'relative' : null,
+                    'top'               : (true === flg) ? '50%'      : null,
                     '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
                     'transform'         : (true === flg) ? 'translateY(-50%)' : null
                 });
@@ -58,7 +52,7 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     'bottom'   : (true === flg) ? '0%'       : null
                 });
                 if ((true === flg) && (null !== this.offset())) {
-                    cmp.style({'bottom' : this.offset()});
+                    cmp.style({ 'bottom' : this.offset() });
                 }
             }
         } catch (e) {
@@ -67,7 +61,10 @@ mofron.effect.VrtPos = class extends mofron.Effect {
         }
     }
     
-    execonts_txt (cmp, flg) {
+    /**
+     * vertical position effect for text component
+     */
+    contsTxt (cmp, flg) {
         try {
             if ('center' === this.type()) {
                 if ( (null   !== cmp.target().parent()) &&
@@ -78,8 +75,8 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 } else if ( (null   !== cmp.target().parent()) &&
                             ('absolute' === cmp.target().parent().style('position')) ) {
                     cmp.style({
-                        'position' : (true === flg) ? 'relative' : null,
-                        'top'      : (true === flg) ? '50%' : null,
+                        'position'          : (true === flg) ? 'relative' : null,
+                        'top'               : (true === flg) ? '50%' : null,
                         '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
                         'transform'         : (true === flg) ? 'translateY(-50%)' : null
                     });
@@ -110,39 +107,37 @@ mofron.effect.VrtPos = class extends mofron.Effect {
         }
     }
     
+    /**
+     * position type setter/getter
+     *
+     * @param p1 (string) position type
+     * @param p1 (undefined) call as getter
+     * @return (string) position type
+     */
     type (prm) {
         try {
-            if (undefined === prm) {
-                /* getter */
-                return (undefined === this.m_type) ? 'center' : this.m_type;
-            }
-            /* setter */
-            if ('string' !== typeof prm) {
-                throw new Error('invalid parameter');
-            }
-            if ( ('top'    !== prm) &&
-                 ('center' !== prm) &&
-                 ('bottom' !== prm) ) {
-                throw new Error('invalid parameter');
-            }
-            this.m_type = prm;
+            return this.member('type', ['top', 'center', 'bottom'], prm, 'center');
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
+    /**
+     * offset size setter/getter
+     *
+     * @param p1 (string) offset size (css value)
+     * @param p1 (undefined) call as getter
+     * @return (string) offset size (css value)
+     */
     offset (prm) {
         try {
-            if (undefined === prm) {
-                /* getter */
-                return (undefined === this.m_offset) ? null : this.m_offset;
-            }
-            /* setter */
-            if ('string' !== typeof prm) {
-                throw new Error('invalid parameter');
-            }
-            this.m_offset = prm;
+            return this.member(
+                'offset',
+                'string', 
+                (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
+                '0rem'
+            ); 
         } catch (e) {
             console.error(e.stack);
             throw e;
