@@ -140,7 +140,7 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 'offset',
                 'string', 
                 (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
-                '0rem'
+                null
             ); 
         } catch (e) {
             console.error(e.stack);
