@@ -40,11 +40,15 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 return;
             }
             if ('center' === this.type()) {
+                let val = '50%';
+                if (null !== this.offset()) {
+                    val = mf.func.sizeSum(val, this.offset());
+                }
                 cmp.style({
                     'position'          : (true === flg) ? 'relative' : null,
-                    'top'               : (true === flg) ? '50%'      : null,
-                    '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
-                    'transform'         : (true === flg) ? 'translateY(-50%)' : null
+                    'top'               : (true === flg) ? val        : null,
+                    '-webkit-transform' : (true === flg) ? 'translateY(-'+ val +')' : null,
+                    'transform'         : (true === flg) ? 'translateY(-'+ val +')' : null
                 });
             } else if ('bottom' === this.type()) {
                 cmp.style({
