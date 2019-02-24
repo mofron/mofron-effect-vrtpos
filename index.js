@@ -25,16 +25,14 @@ mofron.effect.VrtPos = class extends mofron.Effect {
         }
     }
     
-    enable (cmp)  {}
-    disable (cmp) {}
-    
     /**
      * vertical position effect
      *
      * @note private method
      */
-    contents (flg, cmp) {
+    contents (cmp) {
         try {
+            let flg = this.valid();
             if (true === mofron.func.isInclude(cmp, 'Text')) {
                 this.contsTxt(cmp, flg);
                 return;
@@ -106,6 +104,13 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 }
             }
         } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    valid (prm) {
+        try { return this.member('valid', 'boolean', prm, true); } catch (e) {
             console.error(e.stack);
             throw e;
         }
