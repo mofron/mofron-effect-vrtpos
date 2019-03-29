@@ -18,6 +18,7 @@ mofron.effect.VrtPos = class extends mofron.Effect {
             super();
             this.name('VrtPos');
             this.prmMap(['type', 'offset']);
+            this.valType('%');
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -32,30 +33,19 @@ mofron.effect.VrtPos = class extends mofron.Effect {
      */
     contents (cmp) {
         try {
+            if (null !== this.contsIndex()) {
+                this.contsList(this.contsIndex())(this, cmp);
+                return;
+            }
             let flg = this.valid();
             if (true === mofron.func.isInclude(cmp, 'Text')) {
                 this.contsTxt(cmp, flg);
                 return;
             }
             if ('center' === this.type()) {
-                let val = '50%';
-                if (null !== this.offset()) {
-                    val = mf.func.sizeSum(val, this.offset());
-                }
-                cmp.style({
-                    'position'          : (true === flg) ? 'relative' : null,
-                    'top'               : (true === flg) ? val        : null,
-                    '-webkit-transform' : (true === flg) ? 'translateY(-'+ val +')' : null,
-                    'transform'         : (true === flg) ? 'translateY(-'+ val +')' : null
-                });
+                this.contsList(1)(this, cmp);
             } else if ('bottom' === this.type()) {
-                cmp.style({
-                    'position' : (true === flg) ? 'absolute' : null,
-                    'bottom'   : (true === flg) ? '0%'       : null
-                });
-                if ((true === flg) && (null !== this.offset())) {
-                    cmp.style({ 'bottom' : this.offset() });
-                }
+                this.contsList(2)(this, cmp);
             }
         } catch (e) {
             console.error(e.stack);
@@ -76,33 +66,91 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     });
                 } else if ( (null   !== cmp.target().parent()) &&
                             ('absolute' === cmp.target().parent().style('position')) ) {
-                    cmp.style({
-                        'position'          : (true === flg) ? 'relative' : null,
-                        'top'               : (true === flg) ? '50%' : null,
-                        '-webkit-transform' : (true === flg) ? 'translateY(-50%)' : null,
-                        'transform'         : (true === flg) ? 'translateY(-50%)' : null
-                    });
-                    if ((true === flg) && (null !== this.offset())) {
-                        cmp.sizeValue(
-                            'top',
-                            mf.func.sizeSum(cmp.sizeValue('top'), this.offset())
-                        );
-                    }
+                    this.contsList(1)(this, cmp);
                 } else {
-                    cmp.style({
-                        'margin-top'    : (true === flg) ? 'auto' : null,
-                        'margin-bottom' : (true === flg) ? 'auto' : null
-                    });
+                    this.contsList(0)(this, cmp);
                 }
             } else if ('bottom' === this.type()) {
-                cmp.style({
-                    'position' : (true === flg) ? 'absolute' : null,
-                    'bottom'   : (true === flg) ? '0%'       : null
-                });
-                if ((true === flg) && (null !== this.offset())) {
-                    cmp.style({'bottom' : this.offset()});
-                }
+                this.contsList(2)(this, cmp);
             }
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    contsIndex (prm) {
+        try { return this.member('contsIndex', 'number', prm); } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+
+    contsList (idx) {
+        try {
+            let conts = [
+                (eff, cmp) => {
+                    try {
+                        if ('center' === eff.type()) {
+                            cmp.style({
+                                'margin-right': (true === eff.valid()) ? 'auto' : null,
+                                'margin-left' : (true === eff.valid()) ? 'auto' : null
+                            });
+                            if (null !== eff.offset()) {
+                                cmp.style({ 'position': 'relative', 'top': eff.offset() });
+                            }
+                        } else if ('left' === eff.type()) {
+                            cmp.style({
+                                'margin-right': (true === eff.valid()) ? 'auto' : null,
+                                'margin-left' : (true === eff.valid()) ? eff.getValue() : null
+                            });
+                        } else {
+                            cmp.style({
+                                'margin-right': (true === eff.valid()) ? eff.getValue() : null,
+                                'margin-left' : (true === eff.valid()) ? 'auto' : null
+                            });
+                        }
+                    } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                },
+                (eff, cmp) => {
+                    try {
+                        if ('center' === eff.type()) {
+                            cmp.style({
+                                'position'          : (true === eff.valid()) ? 'relative' : null,
+                                'top'               : (true === eff.valid()) ? eff.getValue('50%') : null,
+                                '-webkit-transform' : (true === eff.valid()) ? 'translateY(-50%)' : null,
+                                'transform'         : (true === eff.valid()) ? 'translateY(-50%)' : null
+                            });
+                        }
+                    } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                },
+                (eff, cmp) => {
+                    try {
+                        let val = (null !== this.offset()) ? this.offset() : '0%';
+                        if ('top' === eff.type()) {
+                            cmp.style({
+                                'position' : (true === eff.valid()) ? 'absolute' : null,
+                                'top'      : (true === eff.valid()) ? val        : null
+                            });
+                        } else if ('bottom' === eff.type()) {
+                            cmp.style({
+                                'position' : (true === eff.valid()) ? 'absolute' : null,
+                                'bottom'   : (true === eff.valid()) ? val        : null
+                            });
+                        }
+                    } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                },
+            ];
+            return conts[idx];
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -147,6 +195,37 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
                 null
             ); 
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    valType (prm) {
+        try { return this.member('valType', 'string', prm, 'rem'); } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    getValue (prm) {
+        try {
+            let val = '0' + this.valType();
+            if (undefined !== prm) {
+                val = mf.func.getSize(prm);
+                if (null === val) {
+                    throw new Error('invalid paramter');
+                }
+                this.valType(val.type());
+            }
+
+            if (null !== this.offset()) {
+                try { return mf.func.sizeSum(val, this.offset()); } catch (e) {
+                    return val;
+                }
+            } else {
+                return val;
+            }
         } catch (e) {
             console.error(e.stack);
             throw e;
