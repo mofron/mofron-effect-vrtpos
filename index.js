@@ -67,7 +67,12 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 } else if ( (null   !== cmp.target().parent()) &&
                             ('absolute' === cmp.target().parent().style('position')) ) {
                     this.contsList(1)(this, cmp);
+                } else if ( ("grid" === cmp.target().parent().style('display')) ||
+                            ("inline-grid" === cmp.target().parent().style('display')) ) {
+                    this.contsList(0)(this, cmp);
                 } else {
+                    console.warn("forced position");
+                    cmp.target().parent().style({ "display" : "grid" });
                     this.contsList(0)(this, cmp);
                 }
             } else if ('bottom' === this.type()) {
@@ -93,8 +98,8 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     try {
                         if ('center' === eff.type()) {
                             cmp.style({
-                                'margin-right': (true === eff.valid()) ? 'auto' : null,
-                                'margin-left' : (true === eff.valid()) ? 'auto' : null
+                                'margin-top': (true === eff.valid()) ? 'auto' : null,
+                                'margin-bottom' : (true === eff.valid()) ? 'auto' : null
                             });
                             if (null !== eff.offset()) {
                                 cmp.style({ 'position': 'relative', 'top': eff.offset() });
