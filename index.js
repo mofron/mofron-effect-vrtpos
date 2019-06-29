@@ -51,8 +51,8 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     this.contsList(0)(this, cmp);
                 }
             } else {
-                if ( ("relative" === cmp.style("position")) ||
-                     ("absolute" === cmp.style("position")) ) {
+                if ( ("absolute" === cmp.style("position")) ||
+                     ("fixed" === cmp.style("position")) ) {
                     this.contsList(2)(this, cmp);
                 } else {
                     this.contsList(0)(this, cmp);
@@ -75,6 +75,11 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     cmp.target().parent().style({
                         'align-items' : (true === flg) ? this.type() : null
                     });
+                } else if ("none" === cmp.target().parent().style('display')) {
+                    //let buf = cmp.target().parent().data(cmp.getId());
+                    //if ((null !== buf) && ("flex" === buf.dispBuff)) {
+                    //    console.log(buf.dispBuff);
+                    //}
                 } else if ( (null   !== cmp.target().parent()) &&
                             ('absolute' === cmp.target().parent().style('position')) ) {
                     this.contsList(1)(this, cmp);
@@ -82,9 +87,9 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                             ("inline-grid" === cmp.target().parent().style('display')) ) {
                     this.contsList(0)(this, cmp);
                 } else {
-                    console.warn("forced position");
-                    cmp.target().parent().style({ "display" : "grid" });
-                    this.contsList(0)(this, cmp);
+                    //console.warn("forced position");
+                    //cmp.target().parent().style({ "display" : "grid" });
+                    //this.contsList(0)(this, cmp);
                 }
             } else {
                 if ( ("relative" === cmp.style("position")) ||
@@ -122,13 +127,13 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                             }
                         } else if ('top' === eff.type()) {
                             cmp.style({
-                                'margin-top': (true === eff.valid()) ? eff.getValue() : null,
+                                'margin-top': (true === eff.valid()) ? eff.offset() : null,
                                 'margin-bottom' : (true === eff.valid()) ? 'auto' : null
                             });
                         } else {
                             cmp.style({
                                 'margin-top': (true === eff.valid()) ? 'auto' : null,
-                                'margin-buttom' : (true === eff.valid()) ? eff.getValue() : null,
+                                'margin-bottom' : (true === eff.valid()) ? eff.offset() : null,
                             });
                         }
                     } catch (e) {
@@ -157,12 +162,12 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                         if ('top' === eff.type()) {
                             cmp.style({
                                 //'position' : (true === eff.valid()) ? 'absolute' : null,
-                                'top'      : (true === eff.valid()) ? val        : null
+                                'top'      : (true === eff.valid()) ? val : null
                             });
                         } else if ('bottom' === eff.type()) {
                             cmp.style({
                                 //'position' : (true === eff.valid()) ? 'absolute' : null,
-                                'bottom'   : (true === eff.valid()) ? val        : null
+                                'bottom'   : (true === eff.valid()) ? val : null
                             });
                         }
                     } catch (e) {
