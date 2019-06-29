@@ -43,9 +43,20 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 return;
             }
             if ('center' === this.type()) {
-                this.contsList(1)(this, cmp);
-            } else if ('bottom' === this.type()) {
-                this.contsList(2)(this, cmp);
+                if ("relative" === cmp.style("position")) {
+                    this.contsList(1)(this, cmp);
+                } else if ("absolute" === cmp.style("position")) {
+                    this.contsList(2)(this, cmp);
+                } else {
+                    this.contsList(0)(this, cmp);
+                }
+            } else {
+                if ( ("relative" === cmp.style("position")) ||
+                     ("absolute" === cmp.style("position")) ) {
+                    this.contsList(2)(this, cmp);
+                } else {
+                    this.contsList(0)(this, cmp);
+                }
             }
         } catch (e) {
             console.error(e.stack);
@@ -75,8 +86,13 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     cmp.target().parent().style({ "display" : "grid" });
                     this.contsList(0)(this, cmp);
                 }
-            } else if ('bottom' === this.type()) {
-                this.contsList(2)(this, cmp);
+            } else {
+                if ( ("relative" === cmp.style("position")) ||
+                     ("absolute" === cmp.style("position")) ) {
+                    this.contsList(2)(this, cmp);
+                } else {
+                    this.contsList(0)(this, cmp);
+                }
             }
         } catch (e) {
             console.error(e.stack);
@@ -104,15 +120,15 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                             if (null !== eff.offset()) {
                                 cmp.style({ 'position': 'relative', 'top': eff.offset() });
                             }
-                        } else if ('left' === eff.type()) {
+                        } else if ('top' === eff.type()) {
                             cmp.style({
-                                'margin-right': (true === eff.valid()) ? 'auto' : null,
-                                'margin-left' : (true === eff.valid()) ? eff.getValue() : null
+                                'margin-top': (true === eff.valid()) ? eff.getValue() : null,
+                                'margin-bottom' : (true === eff.valid()) ? 'auto' : null
                             });
                         } else {
                             cmp.style({
-                                'margin-right': (true === eff.valid()) ? eff.getValue() : null,
-                                'margin-left' : (true === eff.valid()) ? 'auto' : null
+                                'margin-top': (true === eff.valid()) ? 'auto' : null,
+                                'margin-buttom' : (true === eff.valid()) ? eff.getValue() : null,
                             });
                         }
                     } catch (e) {
@@ -124,7 +140,7 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     try {
                         if ('center' === eff.type()) {
                             cmp.style({
-                                'position'          : (true === eff.valid()) ? 'relative' : null,
+                                //'position'          : (true === eff.valid()) ? 'relative' : null,
                                 'top'               : (true === eff.valid()) ? eff.getValue('50%') : null,
                                 '-webkit-transform' : (true === eff.valid()) ? 'translateY(-50%)' : null,
                                 'transform'         : (true === eff.valid()) ? 'translateY(-50%)' : null
@@ -137,15 +153,15 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 },
                 (eff, cmp) => {
                     try {
-                        let val = (null !== this.offset()) ? this.offset() : '0%';
+                        let val = (null !== this.offset()) ? this.offset() : '0rem';
                         if ('top' === eff.type()) {
                             cmp.style({
-                                'position' : (true === eff.valid()) ? 'absolute' : null,
+                                //'position' : (true === eff.valid()) ? 'absolute' : null,
                                 'top'      : (true === eff.valid()) ? val        : null
                             });
                         } else if ('bottom' === eff.type()) {
                             cmp.style({
-                                'position' : (true === eff.valid()) ? 'absolute' : null,
+                                //'position' : (true === eff.valid()) ? 'absolute' : null,
                                 'bottom'   : (true === eff.valid()) ? val        : null
                             });
                         }
