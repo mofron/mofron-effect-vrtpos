@@ -76,21 +76,14 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     cmp.target().parent().style({
                         'align-items' : (true === flg) ? this.type() : null
                     });
-                } else if ("none" === cmp.target().parent().style('display')) {
-                    //let buf = cmp.target().parent().data(cmp.getId());
-                    //if ((null !== buf) && ("flex" === buf.dispBuff)) {
-                    //    console.log(buf.dispBuff);
-                    //}
-                } else if ( (null   !== cmp.target().parent()) &&
-                            ('absolute' === cmp.target().parent().style('position')) ) {
+                } else if ( ("absolute" === cmp.style("position")) ||
+                            ("relative" === cmp.style("position")) ) {
                     this.contsList(1)(this, cmp);
                 } else if ( ("grid" === cmp.target().parent().style('display')) ||
                             ("inline-grid" === cmp.target().parent().style('display')) ) {
                     this.contsList(0)(this, cmp);
                 } else {
-                    //console.warn("forced position");
-                    //cmp.target().parent().style({ "display" : "grid" });
-                    //this.contsList(0)(this, cmp);
+                    console.warn("not supported component style");
                 }
             } else {
                 if ( ("relative" === cmp.style("position")) ||

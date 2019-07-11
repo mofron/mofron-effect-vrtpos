@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-vrtpos",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "vertical position effect for mofron",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/simpart/mofron-effect-vrtpos.git"
+    "url": "git+https://github.com/mofron/mofron-effect-vrtpos.git"
   },
   "keywords": [
     "front-end"
@@ -16,7 +16,7 @@
   "author": "simparts",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/simpart/mofron-effect-vrtpos/issues"
+    "url": "https://github.com/mofron/mofron-effect-vrtpos/issues"
   },
-  "homepage": "https://github.com/simpart/mofron-effect-vrtpos#readme"
+  "homepage": "https://github.com/mofron/mofron-effect-vrtpos#readme"
 }
