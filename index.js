@@ -43,12 +43,13 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 return;
             }
             if ('center' === this.type()) {
-                if ("relative" === cmp.style("position")) {
+                if ( ("absolute" === cmp.style("position")) ||
+                     ("relative" === cmp.style("position")) ) {
                     this.contsList(1)(this, cmp);
-                } else if ("absolute" === cmp.style("position")) {
-                    this.contsList(2)(this, cmp);
-                } else {
+                } else if ("flex" === cmp.target().parent().style("display")) {
                     this.contsList(0)(this, cmp);
+                } else {
+                    console.warn("not supported component style");
                 }
             } else {
                 if ( ("absolute" === cmp.style("position")) ||
