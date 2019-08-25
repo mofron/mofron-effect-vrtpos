@@ -82,7 +82,15 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                 } else if ( ("grid" === cmp.target().parent().style('display')) ||
                             ("inline-grid" === cmp.target().parent().style('display')) ) {
                     this.contsList(0)(this, cmp);
-                } else {
+                } else if ( (null   !== cmp.target().parent()) && 
+		            (cmp.getId() !== cmp.parent().getChild(true)[0].getId()) &&
+		            ('relative' === cmp.target().parent().style('position'))  ) {
+		    cmp.style({
+		        "position"  : "absolute",
+                        "top"       : "0rem",
+			"transform" : "translateY(50%)"
+		    });
+		} else {
                     console.warn("not supported component style");
                 }
             } else {
