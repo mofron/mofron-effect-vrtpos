@@ -84,7 +84,8 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     this.contsList(0)(this, cmp);
                 } else if ( (null   !== cmp.target().parent()) && 
 		            (cmp.getId() !== cmp.parent().getChild(true)[0].getId()) &&
-		            ('relative' === cmp.target().parent().style('position'))  ) {
+		            (('relative' === cmp.target().parent().style('position')) ||
+			     ('fixed' === cmp.target().parent().style('position'))) ) {
 		    cmp.style({
 		        "position"  : "absolute",
                         "top"       : "0rem",
