@@ -4,6 +4,7 @@
  * @author simpart
  */
 const mf = require('mofron');
+const transform = require('mofron-transform');
 
 mofron.effect.VrtPos = class extends mofron.Effect {
     /**
@@ -89,8 +90,8 @@ mofron.effect.VrtPos = class extends mofron.Effect {
 		    cmp.style({
 		        "position"  : "absolute",
                         "top"       : "0rem",
-			"transform" : "translateY(50%)"
 		    });
+		    transform.translate(cmp, undefined, "50%");
 		} else {
                     console.warn("not supported component style");
                 }
@@ -148,11 +149,9 @@ mofron.effect.VrtPos = class extends mofron.Effect {
                     try {
                         if ('center' === eff.type()) {
                             cmp.style({
-                                //'position'          : (true === eff.valid()) ? 'relative' : null,
-                                'top'               : (true === eff.valid()) ? eff.getValue('50%') : null,
-                                '-webkit-transform' : (true === eff.valid()) ? 'translateY(-50%)' : null,
-                                'transform'         : (true === eff.valid()) ? 'translateY(-50%)' : null
+                                'top' : (true === eff.valid()) ? eff.getValue('50%') : null,
                             });
+			    transform.translate(cmp, undefined, "-50%");
                         }
                     } catch (e) {
                         console.error(e.stack);
