@@ -1,0 +1,6 @@
+<require>
+    <tag load="mofron-effect-vrtpos">VrtPos</tag>
+</require>
+<div size=(100%,0.5rem) style="display:flex;">
+    <Text effect=VrtPos("top")>Vertical Position</Text>
+</div>

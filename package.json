@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-vrtpos",
-  "version": "0.0.17",
+  "version": "0.1.0",
   "description": "vertical position effect for mofron",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/mofron/mofron-effect-vrtpos.git"
   },
   "dependencies": {
-    "mofron-transform" : ""
+    "mofron-util-transform" : ""
   },
   "keywords": [
     "front-end"
