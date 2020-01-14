@@ -6,7 +6,7 @@
  */
 require('mofron-util-transform');
 const comutl = mofron.util.common;
-
+const cmputl = mofron.util.component;
 
 module.exports = class extends mofron.class.Effect {
     /**
