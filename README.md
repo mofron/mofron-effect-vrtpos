@@ -14,10 +14,12 @@ npm install mofron mofron-effect-vrtpos
 # Sample
 ```html
 <require>
+    <tag load="mofron-comp-text">Text</tag>
     <tag load="mofron-effect-vrtpos">VrtPos</tag>
 </require>
-<div size=(100%,0.5rem) style="display:flex;">
-    <Text effect=VrtPos("top")>Vertical Position</Text>
+
+<div size=(1.5rem,0.8rem) style="display:flex;" color2=[220,220,220]>
+    <Text effect=VrtPos:"center">Vertical Position</Text>
 </div>
 ```
 
@@ -26,5 +28,7 @@ npm install mofron mofron-effect-vrtpos
 | Short<br>Form | Parameter Name | Type | Description |
 |:-------------:|:---------------|:-----|:------------|
 | ◯  | type | string | position type (center,top,bottom) |
-| ◯  | offset | string | offset size (css value) |
+| | | | undefined: call as getter |
+| ◯  | offset | string(size) | offset size |
+| | | | undefined: call as getter |
 
