@@ -4,7 +4,6 @@
  *        the component is positioned specified parameter that is 'center' or 'top' and 'bottom'.
  * @license MIT
  */
-require('mofron-util-transform');
 const comutl = mofron.util.common;
 const cmputl = mofron.util.component;
 
@@ -27,6 +26,7 @@ module.exports = class extends mofron.class.Effect {
             this.confmng().add("type", { type: "string", select: ["top", "center", "bottom"], init: "center" });
             this.confmng().add("offset", { type: "size" });
             /* set config */
+	    this.innerTgt(false);
 	    if (undefined !== prm) {
                 this.config(prm);
 	    }
@@ -44,18 +44,27 @@ module.exports = class extends mofron.class.Effect {
      */
     contents (cmp) {
         try {
-            if (true === comutl.isinc(cmp,"Text")) {
-                this.txtpos(cmp);
-		return;
-	    } else if ( ("absolute" === cmp.style("position")) ||
-	                ("relative" === cmp.style("position")) ||
-			("fixed" === cmp.style("position")) ) {
-                this.toppos(cmp);
-	    } else if ("flex" === cmp.childDom().parent().style("display")) {
-                this.mgnpos(cmp);
-	    } else {
-	        cmp.style({ "position" : "relative" }, { passive: true });
-                this.toppos(cmp);
+	    let rdom = cmp.rootDom();
+            for (let ridx in rdom) {
+
+                if (true === comutl.isinc(cmp,"Text")) {
+                    this.txtpos(rdom[ridx]);
+		    return;
+	        } else if ( ("absolute" === rdom[ridx].style("position")) ||
+	                    ("relative" === rdom[ridx].style("position")) ||
+	                    ("fixed" === rdom[ridx].style("position")) ) {
+                    this.toppos(rdom[ridx]);
+	        } else if ( ("flex" === rdom[ridx].parent().style("display")) ||
+		            ("flex" === cmputl.dispbuff(rdom[ridx])) ) {
+                    this.mgnpos(rdom[ridx]);
+	        } else {
+	            rdom[ridx].style({ "position" : "relative" }, { passive: true });
+                    this.toppos(rdom[ridx]);
+	        }
+
+		if ("flex" !== rdom[ridx].parent().style("display")) {
+                    break;
+		}
 	    }
         } catch (e) {
             console.error(e.stack);
@@ -66,28 +75,29 @@ module.exports = class extends mofron.class.Effect {
     /**
      * set text component position
      * 
-     * @param (mofron.class.Component) effect target component
+     * @param (mofron.class.Dom) dom object
      * @type private
      */
-    txtpos (cmp) {
+    txtpos (dom) {
         try {
 	    let off = this.offset();
-	    let pnt = cmp.childDom().parent();
-	    if ( (null !== pnt) &&
-	         ('flex' === pnt.style('display')) ||
-		 ('grid' === pnt.style('display')) ) {
-		if ("center" === this.type()) {
-		    pnt.style({ "align-items" : "center" });
-                } else if ("bottom" === this.type()) {
-                    pnt.style({ "align-items" : "flex-end" });
-		}
-		if (null !== off) {
-                    cmp.style({ "position" : "relative" }, { passive: true });
-		    cmp.style({ "top" : off });
+	    let pnt = dom.parent();
+	    if (null !== pnt) {
+                let pnt_disp = ("none" === pnt.style("display")) ? cmputl.dispbuff(pnt) : pnt.style("display");
+                if (("flex" === pnt_disp) || ('grid' === pnt_disp)) {
+		    if ("center" === this.type()) {
+		        pnt.style({ "align-items" : "center" });
+                    } else if ("bottom" === this.type()) {
+                        pnt.style({ "align-items" : "flex-end" });
+		    }
+		    if (null !== off) {
+		        dom.style({ "position" : "relative" }, { passive: true });
+		        dom.style({ "top" : off });
+		    }
 		}
             } else {
-                cmp.style({ "position" : "relative" }, { passive: true });
-                this.toppos(cmp);
+	        dom.style({ "position" : "relative" }, { passive: true });
+                this.toppos(dom);
 	    }
         } catch (e) {
             console.error(e.stack);
@@ -98,22 +108,22 @@ module.exports = class extends mofron.class.Effect {
     /**
      * set position by top value
      * 
-     * @param (mofron.class.Component) effect target component
+     * @param (mofron.class.Dom) effect target component
      * @type private
      */
-    toppos (cmp) {
+    toppos (dom) {
         try {
 	    let off = this.offset();
             if ("center" === this.type()) {
-                cmp.style({ "top" : "50%" });
-                cmputl.translate(cmp, undefined, "-50%");
+	        dom.style({ "top" : "50%" });
+		dom.style({ "transform" : "translateY(-50%)" }, { bpref : true });
                 if (null !== off) {
-                    cmp.style({ "margin-top" : off });
+		    dom.style({ "margin-top" : off });
 		}
 	    } else if ("top" === this.type()) {
-                cmp.style({ "top" : (null !== off) ? off : "0rem" });
+	        dom.style({ "top" : (null !== off) ? off : "0rem" });
 	    } else {
-                cmp.style({ "bottom" : (null !== off) ? off : "0rem" });
+	        dom.style({ "bottom" : (null !== off) ? off : "0rem" });
 	    }
 	} catch (e) {
             console.error(e.stack);
@@ -124,31 +134,28 @@ module.exports = class extends mofron.class.Effect {
     /**
      * set position by margin value
      * 
-     * @param (mofron.class.Component) effect target component
+     * @param (mofron.class.Dom) dom object
      * @type private
      */
-    mgnpos (cmp) {
+    mgnpos (dom) {
         try {
             let off = this.offset();
             if ("center" === this.type()) {
-                cmp.style({
-                    "margin-top"    : "auto",
-		    "margin-bottom" : "auto"
-                });
+	        dom.style({ "margin-top": "auto", "margin-bottom": "auto" });
 		if (null !== off) {
-                    cmp.style({ "position" : "relative" }, { passive: true });
-                    cmp.style({ "top" : off });
+		    dom.style({ "position" : "relative" }, { passive: true });
+		    dom.style({ "top" : off });
                 }
             } else if ("top" === this.type()) {
-                cmp.style({
+	        dom.style({
                     "margin-top"    : (null !== off) ? off : "0rem",
-                    "margin-bottom" : "auto"
-                }); 
+		    "margin-bottom" : "auto"
+		});
 	    } else {
-                cmp.style({
+	        dom.style({
                     "margin-top"    : "auto",
-		    "margin-bottom" : (null !== off) ? off : "0rem"
-	        });
+                    "margin-bottom" : (null !== off) ? off : "0rem"
+		});
             }
 	} catch (e) {
             console.error(e.stack);
