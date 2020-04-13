@@ -11,24 +11,26 @@ module.exports = class extends mofron.class.Effect {
     /**
      * initialize vertical position effect
      *
-     * @param (mixed) type parameter
-     *                key-value: effect config
-     * @param offset parameter
+     * @param (mixed) type config parameter
+     *                key-value: effect config list
+     * @param offset config parameter
      * @short type,offset
      * @type private
      */
-    constructor (prm) {
+    constructor (p1, p2) {
         try {
             super();
             this.name("VrtPos");
             this.shortForm("type","offset");
+	    
             /* init config */
             this.confmng().add("type", { type: "string", select: ["top", "center", "bottom"], init: "center" });
             this.confmng().add("offset", { type: "size" });
+            
             /* set config */
 	    this.innerTgt(false);
-	    if (undefined !== prm) {
-                this.config(prm);
+	    if (0 < arguments.length) {
+                this.config(p1,p2);
 	    }
         } catch (e) {
             console.error(e.stack);
