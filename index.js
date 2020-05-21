@@ -96,11 +96,11 @@ module.exports = class extends mofron.class.Effect {
 		        dom.style({ "position" : "relative" }, { passive: true });
 		        dom.style({ "top" : off });
 		    }
+		    return;
 		}
-            } else {
-	        dom.style({ "position" : "relative" }, { passive: true });
-                this.toppos(dom);
-	    }
+            }
+	    dom.style({ "position" : "relative" }, { passive: true });
+            this.toppos(dom);
         } catch (e) {
             console.error(e.stack);
             throw e;
