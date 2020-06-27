@@ -6,6 +6,7 @@
  */
 const comutl = mofron.util.common;
 const cmputl = mofron.util.component;
+const transfm = require("mofron-util-transform");
 
 module.exports = class extends mofron.class.Effect {
     /**
@@ -118,7 +119,7 @@ module.exports = class extends mofron.class.Effect {
 	    let off = this.offset();
             if ("center" === this.type()) {
 	        dom.style({ "top" : "50%" });
-		dom.style({ "transform" : "translateY(-50%)" }, { bpref : true });
+		transfm(dom, undefined, "-50%");
                 if (null !== off) {
 		    dom.style({ "margin-top" : off });
 		}
