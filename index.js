@@ -21,7 +21,7 @@ module.exports = class extends mofron.class.Effect {
     constructor (p1, p2) {
         try {
             super();
-            this.name("VrtPos");
+            this.modname("VrtPos");
             this.shortForm("type","offset");
 	    
             /* init config */
