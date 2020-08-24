@@ -13,10 +13,10 @@ npm install mofron mofron-effect-vrtpos
 
 # Sample
 ```html
-<require>
+<setting>
     <tag load="mofron-comp-text">Text</tag>
     <tag load="mofron-effect-vrtpos">VrtPos</tag>
-</require>
+</setting>
 
 <div size=(1.5rem,0.8rem) style="display:flex;" color2=[220,220,220]>
     <Text effect=VrtPos:"center">Vertical Position</Text>
